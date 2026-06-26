@@ -1,19 +1,32 @@
+import React from 'react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import Box from '@mui/material/Box'
 import { appBarStyles, logoStyles } from './Navbar.styles'
 import { appConfig } from '../../data/tournamentConfig'
+import type { AppTab } from '../../App'
 
 interface NavbarProps {
   isDarkMode?: boolean
   onThemeToggle?: () => void
+  activeTab?: AppTab
+  onTabChange?: (tab: AppTab) => void
 }
 
-function Navbar({ isDarkMode = true, onThemeToggle }: NavbarProps) {
+const tabs: { label: string; value: AppTab }[] = [
+  { label: 'Setup', value: 'setup' },
+  { label: 'Points Table', value: 'points-table' },
+  { label: 'Enter Results', value: 'enter-results' },
+  { label: 'Qualification', value: 'qualification' },
+]
+
+function Navbar({ isDarkMode = true, onThemeToggle, activeTab = 'setup', onTabChange }: NavbarProps) {
   return (
     <AppBar position="sticky" sx={appBarStyles} elevation={0}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
@@ -30,6 +43,27 @@ function Navbar({ isDarkMode = true, onThemeToggle }: NavbarProps) {
             </Typography>
           </Box>
         </Box>
+
+        {/* Middle - Tabs */}
+        <Tabs
+          value={activeTab}
+          onChange={(_: React.SyntheticEvent, val: AppTab) => onTabChange?.(val)}
+          textColor="inherit"
+          sx={{
+            '& .MuiTabs-indicator': {
+              backgroundColor: 'primary.main',
+            },
+          }}
+        >
+          {tabs.map((tab) => (
+            <Tab
+              key={tab.value}
+              label={tab.label}
+              value={tab.value}
+              sx={{ color: 'text.secondary', '&.Mui-selected': { color: 'text.primary' }, fontSize: '13px' }}
+            />
+          ))}
+        </Tabs>
 
         {/* Right - Theme toggle */}
         <IconButton onClick={onThemeToggle} sx={{ color: 'text.secondary' }}>
