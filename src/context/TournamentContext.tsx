@@ -49,3 +49,5 @@ export function useTournament() {
   }
   return context
 }
+
+export { TournamentContext }

@@ -6,6 +6,7 @@ import { darkTheme, lightTheme } from './theme'
 import Navbar from './components/Navbar'
 import TournamentSetup from './components/TournamentSetup'
 import { TournamentProvider } from './context/TournamentContext'
+import PointsTable from './components/PointsTable'
 
 export type AppTab = 'setup' | 'points-table' | 'enter-results' | 'qualification'
 
@@ -27,6 +28,9 @@ function App() {
         />
         <Box sx={{ display: activeTab === 'setup' ? 'block' : 'none' }}>
           <TournamentSetup onComplete={() => setActiveTab('points-table')} />
+        </Box>
+        <Box sx={{ display: activeTab === 'points-table' ? 'block' : 'none' }}>
+          <PointsTable />
         </Box>
       </TournamentProvider>
     </ThemeProvider>
