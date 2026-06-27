@@ -30,10 +30,6 @@ function PointsTable() {
   }
 
   const teamStats = useNRR(tournament)
-  const remainingMatches = tournament.matches.filter((m) => !m.result)
-
-  // All possible fixtures that haven't been played yet
-  const remainingFixtures = tournament.matches.filter((m) => !m.result)
 
   return (
     <Box sx={containerStyles}>
@@ -114,29 +110,53 @@ function PointsTable() {
         </Typography>
       </Box>
 
-      {/* Remaining Fixtures */}
-      {remainingFixtures.length > 0 && (
+      {/* Match History */}
+      {tournament.matches.filter((m) => m.result).length > 0 && (
         <>
           <Typography variant="h6" sx={{ ...sectionTitleStyles, mb: 2 }}>
-            Upcoming Matches
+            Match History
           </Typography>
           <Box sx={cardStyles}>
-            {remainingFixtures.map((match) => (
-              <Box key={match.id} sx={fixtureRowStyles}>
-                <Typography sx={{ color: 'text.primary', fontSize: '13px' }}>
-                  {match.team1.name} vs {match.team2.name}
-                </Typography>
-                <Chip
-                  label="Upcoming"
-                  size="small"
-                  sx={{ bgcolor: 'background.default', color: 'text.secondary', fontSize: '11px' }}
-                />
-              </Box>
-            ))}
+            {tournament.matches
+              .filter((m) => m.result)
+              .map((match) => {
+                const winner =
+                  match.result === 'team1'
+                    ? match.team1.name
+                    : match.result === 'team2'
+                    ? match.team2.name
+                    : match.result === 'tied'
+                    ? 'Tied'
+                    : 'No Result'
+
+                return (
+                  <Box key={match.id} sx={fixtureRowStyles}>
+                    <Box>
+                      <Typography sx={{ color: 'text.primary', fontSize: '13px' }}>
+                        {match.team1.name} vs {match.team2.name}
+                      </Typography>
+                      <Typography sx={{ color: 'text.secondary', fontSize: '11px', mt: 0.5 }}>
+                        {match.innings1?.runs}/{match.innings1?.allOut ? 'all out' : match.innings1?.overs + ' ov'}
+                        {' · '}
+                        {match.innings2?.runs}/{match.innings2?.allOut ? 'all out' : match.innings2?.overs + ' ov'}
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label={winner === 'Tied' || winner === 'No Result' ? winner : `${winner} won`}
+                      size="small"
+                      sx={{
+                        bgcolor: winner === 'No Result' ? 'background.default' : 'rgba(57, 211, 83, 0.1)',
+                        color: winner === 'No Result' ? 'text.secondary' : 'primary.main',
+                        fontWeight: 600,
+                        fontSize: '11px',
+                      }}
+                    />
+                  </Box>
+                )
+              })}
           </Box>
         </>
       )}
-
     </Box>
   )
 }

@@ -91,14 +91,14 @@ describe('PointsTable', () => {
     expect(screen.queryByText('Upcoming Matches')).not.toBeInTheDocument()
   })
 
-  it('shows upcoming matches when pending matches exist', () => {
-    renderWithTournament(mockTournamentWithUpcoming)
-    expect(screen.getByText('Upcoming Matches')).toBeInTheDocument()
-    expect(screen.getByText('Australia vs England')).toBeInTheDocument()
-  })
-
   it('renders format and qualification info', () => {
     renderWithTournament()
     expect(screen.getByText(/T20 · Top 2 qualify/i)).toBeInTheDocument()
+  })
+
+  it('shows match history for completed matches', () => {
+    renderWithTournament()
+    expect(screen.getByText('Match History')).toBeInTheDocument()
+    expect(screen.getByText('India vs Australia')).toBeInTheDocument()
   })
 })
