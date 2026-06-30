@@ -20,8 +20,12 @@ function PointsTable() {
   const { tournament } = useTournament()
 
   if (!tournament) {
-    return (
+  return (
       <Box sx={containerStyles}>
+        <Typography variant="h4" sx={sectionTitleStyles}>
+          Points Table
+        </Typography>
+        <Box sx={dividerStyles} />
         <Typography sx={{ color: 'text.secondary' }}>
           No tournament set up yet. Go to Setup tab to create one.
         </Typography>

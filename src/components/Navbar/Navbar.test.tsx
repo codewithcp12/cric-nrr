@@ -13,7 +13,7 @@ describe('Navbar', () => {
 
   it('renders the app name', () => {
     renderNavbar()
-    expect(screen.getByText('CricNRR')).toBeInTheDocument()
+    expect(screen.getByText('Net Run Rate Calculator')).toBeInTheDocument()
   })
 
   it('renders the tagline', () => {
@@ -21,9 +21,9 @@ describe('Navbar', () => {
     expect(screen.getByText('Tournament NRR Manager')).toBeInTheDocument()
   })
 
-  it('renders the cricket emoji', () => {
+  it('renders the logo image', () => {
     renderNavbar()
-    expect(screen.getByText('🏏')).toBeInTheDocument()
+    expect(screen.getByAltText('Net Run Rate Calculator')).toBeInTheDocument()
   })
 
   it('renders light mode icon when in dark mode', () => {

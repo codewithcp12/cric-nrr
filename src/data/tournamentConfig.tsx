@@ -20,7 +20,7 @@ export const defaultTournamentConfig = {
 }
 
 export const appConfig = {
-  name: 'CricNRR',
+  name: 'Net Run Rate Calculator',
   tagline: 'Tournament NRR Manager',
   formats: ['T20', 'ODI', 'T10'] as MatchFormat[],
 }

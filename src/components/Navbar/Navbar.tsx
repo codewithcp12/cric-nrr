@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import { appBarStyles, logoStyles } from './Navbar.styles'
 import { appConfig } from '../../data/tournamentConfig'
 import type { AppTab } from '../../App'
+import logo from '../../assets/logo.png'
 
 interface NavbarProps {
   isDarkMode?: boolean
@@ -29,11 +30,15 @@ const tabs: { label: string; value: AppTab }[] = [
 function Navbar({ isDarkMode = true, onThemeToggle, activeTab = 'setup', onTabChange }: NavbarProps) {
   return (
     <AppBar position="sticky" sx={appBarStyles} elevation={0}>
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
+      <Toolbar sx={{ justifyContent: 'space-between', position: 'relative' }}>
 
         {/* Left - Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography variant="h6" sx={{ fontSize: '22px' }}>🏏</Typography>
+          <img
+            src={logo}
+            alt="Net Run Rate Calculator"
+            style={{ height: '36px', width: 'auto' }}
+          />
           <Box>
             <Typography variant="h6" sx={logoStyles}>
               {appConfig.name}
@@ -45,25 +50,27 @@ function Navbar({ isDarkMode = true, onThemeToggle, activeTab = 'setup', onTabCh
         </Box>
 
         {/* Middle - Tabs */}
-        <Tabs
-          value={activeTab}
-          onChange={(_: React.SyntheticEvent, val: AppTab) => onTabChange?.(val)}
-          textColor="inherit"
-          sx={{
-            '& .MuiTabs-indicator': {
-              backgroundColor: 'primary.main',
-            },
-          }}
-        >
-          {tabs.map((tab) => (
-            <Tab
-              key={tab.value}
-              label={tab.label}
-              value={tab.value}
-              sx={{ color: 'text.secondary', '&.Mui-selected': { color: 'text.primary' }, fontSize: '13px' }}
-            />
-          ))}
-        </Tabs>
+        <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+          <Tabs
+            value={activeTab}
+            onChange={(_: React.SyntheticEvent, val: AppTab) => onTabChange?.(val)}
+            textColor="inherit"
+            sx={{
+              '& .MuiTabs-indicator': {
+                backgroundColor: 'primary.main',
+              },
+            }}
+          >
+            {tabs.map((tab) => (
+              <Tab
+                key={tab.value}
+                label={tab.label}
+                value={tab.value}
+                sx={{ color: 'text.secondary', '&.Mui-selected': { color: 'text.primary' }, fontSize: '13px' }}
+              />
+            ))}
+          </Tabs>
+        </Box>
 
         {/* Right - Theme toggle */}
         <IconButton onClick={onThemeToggle} sx={{ color: 'text.secondary' }}>

@@ -1,5 +1,5 @@
 export const containerStyles = {
-  maxWidth: '680px',
+  maxWidth: '900px',
   mx: 'auto',
   py: 6,
   px: 3,

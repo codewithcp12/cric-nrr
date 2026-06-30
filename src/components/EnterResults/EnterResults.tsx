@@ -41,6 +41,10 @@ function EnterResults() {
   if (!tournament) {
     return (
       <Box sx={containerStyles}>
+        <Typography variant="h4" sx={sectionTitleStyles}>
+          Enter Results
+        </Typography>
+        <Box sx={dividerStyles} />
         <Typography sx={{ color: 'text.secondary' }}>
           No tournament set up yet. Go to Setup tab to create one.
         </Typography>
