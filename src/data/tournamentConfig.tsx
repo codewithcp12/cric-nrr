@@ -6,6 +6,12 @@ export const formatOvers: Record<MatchFormat, number> = {
   T10: 10,
 }
 
+export const formatScoreRange: Record<MatchFormat, { min: number; max: number }> = {
+  T20: { min: 80, max: 220 },
+  ODI: { min: 150, max: 350 },
+  T10: { min: 50, max: 120 },
+}
+
 export const defaultTournamentConfig = {
   pointsPerWin: 2,
   pointsPerLoss: 0,

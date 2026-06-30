@@ -8,6 +8,7 @@ import TournamentSetup from './components/TournamentSetup'
 import { TournamentProvider } from './context/TournamentContext'
 import PointsTable from './components/PointsTable'
 import EnterResults from './components/EnterResults'
+import QualificationSimulator from './components/QualificationSimulator'
 
 export type AppTab = 'setup' | 'points-table' | 'enter-results' | 'qualification'
 
@@ -35,6 +36,9 @@ function App() {
         </Box>
         <Box sx={{ display: activeTab === 'enter-results' ? 'block' : 'none' }}>
           <EnterResults />
+        </Box>
+        <Box sx={{ display: activeTab === 'qualification' ? 'block' : 'none' }}>
+          <QualificationSimulator />
         </Box>
       </TournamentProvider>
     </ThemeProvider>
