@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
@@ -27,18 +27,34 @@ interface TournamentSetupProps {
 }
 
 function TournamentSetup({ onComplete }: TournamentSetupProps) {
-  const { createTournament } = useTournament()
+  const { createTournament, tournament } = useTournament()
 
-  const [name, setName] = useState('')
-  const [format, setFormat] = useState<MatchFormat>('T20')
-  const [qualificationSpots, setQualificationSpots] = useState(2)
-  const [pointsPerWin, setPointsPerWin] = useState(defaultTournamentConfig.pointsPerWin)
-  const [pointsPerLoss, setPointsPerLoss] = useState(defaultTournamentConfig.pointsPerLoss)
-  const [pointsPerTie, setPointsPerTie] = useState(defaultTournamentConfig.pointsPerTie)
-  const [pointsPerNR, setPointsPerNR] = useState(defaultTournamentConfig.pointsPerNR)
-  const [teams, setTeams] = useState<string[]>([])
+  const [name, setName] = useState(tournament?.name ?? '')
+  const [format, setFormat] = useState<MatchFormat>(tournament?.format ?? 'T20')
+  const [qualificationSpots, setQualificationSpots] = useState(tournament?.qualificationSpots ?? 2)
+  const [pointsPerWin, setPointsPerWin] = useState(tournament?.pointsPerWin ?? defaultTournamentConfig.pointsPerWin)
+  const [pointsPerLoss, setPointsPerLoss] = useState(tournament?.pointsPerLoss ?? defaultTournamentConfig.pointsPerLoss)
+  const [pointsPerTie, setPointsPerTie] = useState(tournament?.pointsPerTie ?? defaultTournamentConfig.pointsPerTie)
+  const [pointsPerNR, setPointsPerNR] = useState(tournament?.pointsPerNR ?? defaultTournamentConfig.pointsPerNR)
+  const [teams, setTeams] = useState<string[]>(tournament?.teams.map((t) => t.name) ?? [])
   const [newTeam, setNewTeam] = useState('')
   const [error, setError] = useState('')
+
+  // Reset form when tournament is cleared
+  useEffect(() => {
+    if (!tournament) {
+      setName('')
+      setFormat('T20')
+      setQualificationSpots(2)
+      setPointsPerWin(defaultTournamentConfig.pointsPerWin)
+      setPointsPerLoss(defaultTournamentConfig.pointsPerLoss)
+      setPointsPerTie(defaultTournamentConfig.pointsPerTie)
+      setPointsPerNR(defaultTournamentConfig.pointsPerNR)
+      setTeams([])
+      setNewTeam('')
+      setError('')
+    }
+  }, [tournament])
 
   const handleAddTeam = () => {
     const trimmed = newTeam.trim()
@@ -58,35 +74,35 @@ function TournamentSetup({ onComplete }: TournamentSetupProps) {
 
   const handleCreate = () => {
     if (!name.trim()) {
-        setError('Please enter a tournament name')
-        return
+      setError('Please enter a tournament name')
+      return
     }
     if (teams.length < 2) {
-        setError('Please add at least 2 teams')
-        return
+      setError('Please add at least 2 teams')
+      return
     }
     if (qualificationSpots >= teams.length) {
-        setError('Qualification spots must be less than total teams')
-        return
+      setError('Qualification spots must be less than total teams')
+      return
     }
 
     const tournament: Tournament = {
-        id: crypto.randomUUID(),
-        name: name.trim(),
-        format,
-        totalOvers: formatOvers[format],
-        qualificationSpots,
-        pointsPerWin,
-        pointsPerLoss,
-        pointsPerTie,
-        pointsPerNR,
-        teams: teams.map((t) => ({ id: crypto.randomUUID(), name: t })),
-        matches: [],
+      id: crypto.randomUUID(),
+      name: name.trim(),
+      format,
+      totalOvers: formatOvers[format],
+      qualificationSpots,
+      pointsPerWin,
+      pointsPerLoss,
+      pointsPerTie,
+      pointsPerNR,
+      teams: teams.map((t) => ({ id: crypto.randomUUID(), name: t })),
+      matches: [],
     }
 
     createTournament(tournament)
     onComplete?.()
-    }
+  }
 
   return (
     <Box sx={containerStyles}>

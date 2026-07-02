@@ -1,17 +1,38 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
-import type { Tournament, Match, Team } from '../types'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import type { Tournament, Match } from '../types'
+
+const STORAGE_KEY = 'cric-nrr-tournament'
 
 interface TournamentContextType {
   tournament: Tournament | null
   createTournament: (tournament: Tournament) => void
   addMatch: (match: Match) => void
   updateMatch: (match: Match) => void
+  clearTournament: () => void
 }
 
 const TournamentContext = createContext<TournamentContextType | null>(null)
+export { TournamentContext }
 
 export function TournamentProvider({ children }: { children: ReactNode }) {
-  const [tournament, setTournament] = useState<Tournament | null>(null)
+  const [tournament, setTournament] = useState<Tournament | null>(() => {
+    // Load from localStorage on first render
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      return saved ? JSON.parse(saved) : null
+    } catch {
+      return null
+    }
+  })
+
+  // Save to localStorage whenever tournament changes
+  useEffect(() => {
+    if (tournament) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tournament))
+    } else {
+      localStorage.removeItem(STORAGE_KEY)
+    }
+  }, [tournament])
 
   const createTournament = (newTournament: Tournament) => {
     setTournament(newTournament)
@@ -35,8 +56,12 @@ export function TournamentProvider({ children }: { children: ReactNode }) {
     })
   }
 
+  const clearTournament = () => {
+    setTournament(null)
+  }
+
   return (
-    <TournamentContext.Provider value={{ tournament, createTournament, addMatch, updateMatch }}>
+    <TournamentContext.Provider value={{ tournament, createTournament, addMatch, updateMatch, clearTournament }}>
       {children}
     </TournamentContext.Provider>
   )
@@ -49,5 +74,3 @@ export function useTournament() {
   }
   return context
 }
-
-export { TournamentContext }
