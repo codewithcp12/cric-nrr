@@ -43,7 +43,7 @@ function App() {
         </Box>
       </TournamentProvider>
       <DonationPopover
-        stripeUrl="https://donate.stripe.com/eVq00lcxGaqg7lmahR5wI00"
+        stripeUrl={import.meta.env.VITE_STRIPE_DONATION_URL}
         title="Support CricNRR"
         description="CricNRR is free and always will be. If it's helped your team track NRR or qualify for the next stage, consider buying me a coffee — it keeps the servers running and new features coming. 🏏"
       />
